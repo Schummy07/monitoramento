@@ -59,5 +59,7 @@ app.callback(Output("grafico", "figure"),
              Input("Turno", "value"),
              Input("Frequencia", "value"))(atualizar)
 
+server = app.server 
+
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run_server(host = "0.0.0.0", port=8050)
