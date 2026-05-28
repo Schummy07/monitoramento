@@ -7,7 +7,7 @@ def mapa_analitico(variavel, data_ini, data_fin, turno, dia_semana):
     #variavel = variavel[0]
     
     #importação dos dados
-    url = "https://raw.githubusercontent.com/Schummy07/monitoramento/refs/heads/main/dados.csv"
+    url = "https://raw.githubusercontent.com/Schummy07/monitoramento/main/dados.csv"
     dados = pd.read_excel(url)
     dados["data"] = pd.to_datetime(dados["data"], dayfirst= True)
     url_mapa = "https://raw.githubusercontent.com/Schummy07/monitoramento/refs/heads/main/mapa_atual.geojson"
