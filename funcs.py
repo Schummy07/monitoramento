@@ -24,6 +24,16 @@ def mapa_analitico(variavel, data_ini, data_fin, turno, dia_semana):
                           (dados["turno"].isin(turno)) &
                           (dados["dia_semana"].isin(dia_semana))]
     
+    for i in dados_analise:
+        if len(dados_analise[i]) == 0:
+            figura = go.Figure()
+            figura.add_annotation(xref = "paper",
+                                  yref = "paper",
+                                  x = 0.5, y = 0.5,
+                                  text = "não há valores correspondentes para o filtro selecionado")
+            return figura 
+        
+    
     #calculo das médias da variável selecionada para cada setor 
     medias = dados_analise.groupby(by = ["data" ,"setor"], as_index = False)[variavel].sum()
     medias = medias.groupby("setor", as_index = False)[variavel].mean()
@@ -63,6 +73,16 @@ def serie_historica(variavel, data_ini, data_fin, turno, dia_semana):
     
     data_filtro = data[(data["data"] >= data_ini) & (data["data"]<= data_fin)]
     data_grafico = data_filtro[(data_filtro["turno"].isin(turno)) & (data_filtro["dia_semana"].isin(dia_semana))]
+    
+    for i in data_grafico:
+        if len(data_grafico[i]) == 0:
+            figura = go.Figure()
+            figura.add_annotation(xref = "paper",
+                                  yref = "paper",
+                                  x = 0.5, y = 0.5,
+                                  text = "não há valores correspondentes para o filtro selecionado")
+            return figura
+    
     data_grafico = data_grafico.groupby(by = ["data", "setor"], as_index = False)[variavel].sum()
     
     figura = px.line(data_grafico, x = "data", y = variavel, color = "setor")
@@ -79,6 +99,15 @@ def medias(variavel, data_ini, data_fin, turno, dia_semana):
     
     data_filtro = data[(data["data"] >= data_ini) & (data["data"]<= data_fin)]
     data_grafico = data_filtro[(data_filtro["turno"].isin(turno)) & (data_filtro["dia_semana"].isin(dia_semana))]
+    
+    for i in data_grafico:
+        if len(data_grafico[i]) == 0:
+            figura = go.Figure()
+            figura.add_annotation(xref = "paper",
+                                  yref = "paper",
+                                  x = 0.5, y = 0.5,
+                                  text = "não há valores correspondentes para o filtro selecionado")
+            return figura
     
     data_grafico = data_grafico.groupby(by = ["data", "setor", "dia_semana"], as_index = False)[variavel].sum()
     data_grafico = data_grafico.groupby( by = ["setor", "dia_semana"], as_index = False)[variavel].mean()
@@ -101,6 +130,16 @@ def correl(variavel1, variavel2, data_ini, data_fin, dia_semana, turno, setor):
                    & (dados["dia_semana"].isin(dia_semana))
                    & (dados["turno"].isin(turno))
                    & (dados["setor"].isin(setor))]
+    
+    for i in dados_filtro:
+        if len(dados_filtro[i]) == 0:
+            figura = go.Figure()
+            figura.add_annotation(xref = "paper",
+                                  yref = "paper",
+                                  x = 0.5, y = 0.5,
+                                  text = "não há valores correspondentes para o filtro selecionado")
+            
+            return figura
     
     dados_grafico = dados_filtro.groupby(by = ["data", "setor"], as_index = False).aggregate(x = (variavel1,"sum"),
                                                                                              y = (variavel2, "sum"))
@@ -137,6 +176,16 @@ def histograma(variavel1, variavel2, data_ini, data_fin, dia_semana, turno, seto
                    & (dados["turno"].isin(turno))
                    & (dados["setor"].isin(setor))]
     
+    for i in dados_filtro:
+        if len(dados_filtro[i]) == 0:
+            figura = go.Figure()
+            figura.add_annotation(xref = "paper",
+                                  yref = "paper",
+                                  x = 0.5, y = 0.5,
+                                  text = "não há valores correspondentes para o filtro selecionado")
+            
+            return figura
+
     dados_grafico = dados_filtro.groupby(by = ["data", "setor"], as_index = False).aggregate(x = (variavel1,"sum"),
                                                                                              y = (variavel2, "sum"))
     
