@@ -43,6 +43,10 @@ def mapa_analitico(variavel, data_ini, data_fin, turno, dia_semana):
     mapa_filtro = mapa[mapa["SETOR"].isin(medias["setor"])]
     mapa_plot = mapa_filtro.__geo_interface__
     
+    # mínimo e máximo do colorpad do mapa 
+    min = medias[variavel].min()-(medias[variavel].max()*0.2)
+    max = medias[variavel].max() + (medias[variavel].max()*0.2)
+    
     # return mapa_filtro, medias - linha de teste 
     # plot do gráfico georeferenciado 
     fig = px.choropleth_map(
@@ -51,6 +55,7 @@ def mapa_analitico(variavel, data_ini, data_fin, turno, dia_semana):
         locations="setor",
         featureidkey="properties.SETOR",
         color= variavel,
+        range_color = [min, max],
         color_continuous_scale="Oranges",
         center = {"lat": -22.39, "lon": -47.577}, 
         zoom = 11, 
@@ -112,8 +117,10 @@ def medias(variavel, data_ini, data_fin, turno, dia_semana):
     data_grafico = data_grafico.groupby(by = ["data", "setor", "dia_semana"], as_index = False)[variavel].sum()
     data_grafico = data_grafico.groupby( by = ["setor", "dia_semana"], as_index = False)[variavel].mean()
     
-    figura = px.bar(data_grafico, x = variavel, y = "setor", color = "dia_semana", orientation = "h")
-    figura.update_layout(barmode = "group")
+    figura = px.bar(data_grafico, x = variavel, y = "setor", color = "dia_semana", orientation = "h", text = variavel)
+    figura.update_layout(barmode = "group", yaxis=dict(categoryorder = "total ascending"))
+    figura.update_traces(textposition = "outside")
+    figura.update_yaxes(type = "category")
     
     return figura
 

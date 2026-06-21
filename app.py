@@ -9,6 +9,7 @@ app = dash.Dash(__name__)
 
 app.layout = html.Div([
     
+    #bloco do título, fixado acima da página 
     html.Div([html.H1("Painel Analítico: Rio Claro - SP")],
              style = {"position": "fixed",
                       "display": "flex",
@@ -20,6 +21,7 @@ app.layout = html.Div([
                       "marginLeft": "13px",
                       "marginRight": "13px"}),
     
+    # bloco dos filtros aplicáveis, filtram os dados do mapa de calor e da série histórica 
     html.Div([html.H1("Filtros"),
     dcc.Dropdown(id = "Parametro_Operacional", 
                   options = [{"label": "Tonelagem", "value": "producao"},
@@ -52,6 +54,7 @@ app.layout = html.Div([
                       "width": "60%", 
                       "marginTop": "70px"}),
     
+    # bloco que plota o mapa de calor 
     html.Div([html.H2("Mapa de Calor", style = {"marginLeft": "20px"}),
         html.Div([dcc.Graph(id = "mapa")], 
              style = {"display": "flex",
@@ -63,8 +66,11 @@ app.layout = html.Div([
              style = {"backgroundColor": "#9feaa8",
                       "marginTop": "30px",
                       "marginBottom":"30px",
-                      "border":"5px solid black"}),
+                      "border":"5px solid black",
+                      "borderRadius": "10px"}),
     
+    # bloco da série histórica, plota dois gráficos: a série histórica com valores absolutos e o gráfico de barras para 
+    # as médias das variáveis usadas
     html.Div([html.H1("Série Histórica", style = {"marginLeft": "20px"}),
         html.Div([dcc.Graph(id = "grafico1", style = {"width": "48%"}), dcc.Graph(id = "grafico2", style = {"width": "48%"})], 
              style = {"display":"flex",
@@ -74,11 +80,15 @@ app.layout = html.Div([
                       "width": "100%", 
                       "marginBottom": "30px"})],
              style = {"border":"5px solid black",
+                      "borderRadius": "10px",
+                      "flexWrap": "wrap",
                       "backgroundColor": "#9feaa8",
                       "width": "90%",
                       "marginBottom": "50px",
                       "justifyContent": "center"}),
     
+    # bloco que contém o gráfico de correlação com o histograma dos resíduos 
+    # possuí um filtro próprio  
     html.Div([html.H1("Correlação", style = {"marginLeft": "20px"}),
         html.Div([dcc.Dropdown(id = "variavel 1",
                                options = [{"label":"Tamanho_setor", "value": "km_coleta"},
@@ -133,7 +143,9 @@ app.layout = html.Div([
                       "backgroundColor": "#9feaa8",
                       "width": "90%", 
                       "alignItems": "center",
-                      "border":"5px solid black"})
+                      "border":"5px solid black",
+                      "borderRadius": "10px",
+                      "flexWrap": "wrap"})
 ], 
                       style={"display": "flex",
                              "flexDirection": "column",
@@ -141,6 +153,7 @@ app.layout = html.Div([
                              "margin": "0",
                              "padding": "0",
                              "backgroundColor": "#26ce34"})
+
 
 def gerar_mapa(variavel, data_ini, data_fin, turno, dia_semana):
     return fc.mapa_analitico(variavel, data_ini, data_fin, turno, dia_semana)
