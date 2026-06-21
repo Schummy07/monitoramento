@@ -63,8 +63,8 @@ def mapa_analitico(variavel, data_ini, data_fin, turno, dia_semana):
     
     fig.update_layout(
         margin=dict(l=8, r=0, t=0, b=0), 
-        width = 900, 
-        height = 900)
+        width = 400, 
+        height = 600)
     
     return fig
     
