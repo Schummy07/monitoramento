@@ -54,7 +54,7 @@ app.layout = html.Div([
                       "width": "60%", 
                       "marginTop": "70px"}),
     
-    # bloco que plota o mapa de calor 
+    # bloco que plota o mapa de calor e as séries históricas 
     html.Div([
         html.Div([html.H2("Mapa de Calor", style = {"marginLeft": "20px"}),
                   html.Div([dcc.Graph(id = "mapa")])],
@@ -62,6 +62,9 @@ app.layout = html.Div([
                           "flexDirection":"column",
                           "alignItems":"center",
                           "width":"35%",
+                          "flex": "1 1 500px",
+                          "minWidth": "300px",
+                          "maxWidth":"100%",
                           "backgroundColor": "#9feaa8",
                           "border":"5px solid black",
                           "borderRadius": "10px",
@@ -153,6 +156,7 @@ app.layout = html.Div([
                       "flexWrap": "wrap"})
 ], 
                       style={"display": "flex",
+                             "flexWrap": "wrap",
                              "flexDirection": "column",
                              "alignItems": "center",
                              "margin": "0",
