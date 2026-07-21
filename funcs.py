@@ -9,7 +9,7 @@ def mapa_analitico(variavel, data_ini, data_fin, turno, dia_semana):
     #variavel = variavel[0]
     
     #importação dos dados
-    url = "https://raw.githubusercontent.com/Schummy07/monitoramento/main/dados.csv"
+    url = "https://raw.githubusercontent.com/Schummy07/monitoramento/refs/heads/main/dados.csv"
     dados = pd.read_csv(url)
     dados["data"] = pd.to_datetime(dados["data"])
     url_mapa = "https://raw.githubusercontent.com/Schummy07/monitoramento/refs/heads/main/mapa_atual.geojson"
@@ -70,7 +70,7 @@ def mapa_analitico(variavel, data_ini, data_fin, turno, dia_semana):
     
     
 def serie_historica(variavel, data_ini, data_fin, turno, dia_semana):
-    data = pd.read_csv("https://raw.githubusercontent.com/Schummy07/monitoramento/main/dados.csv")
+    data = pd.read_csv("https://raw.githubusercontent.com/Schummy07/monitoramento/refs/heads/main/dados.csv")
     data["data"] = pd.to_datetime(data["data"])
     
     data_ini = pd.to_datetime(data_ini)
@@ -96,7 +96,7 @@ def serie_historica(variavel, data_ini, data_fin, turno, dia_semana):
 
 
 def medias(variavel, data_ini, data_fin, turno, dia_semana):
-    data = pd.read_csv("https://raw.githubusercontent.com/Schummy07/monitoramento/main/dados.csv")
+    data = pd.read_csv("https://raw.githubusercontent.com/Schummy07/monitoramento/refs/heads/main/dados.csv")
     data["data"] = pd.to_datetime(data["data"])
     
     data_ini = pd.to_datetime(data_ini)
@@ -116,6 +116,7 @@ def medias(variavel, data_ini, data_fin, turno, dia_semana):
     
     data_grafico = data_grafico.groupby(by = ["data", "setor", "dia_semana"], as_index = False)[variavel].sum()
     data_grafico = data_grafico.groupby( by = ["setor", "dia_semana"], as_index = False)[variavel].mean()
+    data_grafico[variavel] = data_grafico[variavel].round(2)
     
     figura = px.bar(data_grafico, x = variavel, y = "setor", color = "dia_semana", orientation = "h", text = variavel)
     figura.update_layout(barmode = "group", yaxis=dict(categoryorder = "total ascending"))
@@ -126,7 +127,7 @@ def medias(variavel, data_ini, data_fin, turno, dia_semana):
 
 
 def correl(variavel1, variavel2, data_ini, data_fin, dia_semana, turno, setor):
-    dados = pd.read_csv("https://raw.githubusercontent.com/Schummy07/monitoramento/main/dados.csv")
+    dados = pd.read_csv("https://raw.githubusercontent.com/Schummy07/monitoramento/refs/heads/main/dados.csv")
     dados["data"] = pd.to_datetime(dados["data"])
     
     data_ini = pd.to_datetime(data_ini)
@@ -171,7 +172,7 @@ def correl(variavel1, variavel2, data_ini, data_fin, dia_semana, turno, setor):
     
     
 def histograma(variavel1, variavel2, data_ini, data_fin, dia_semana, turno, setor):
-    dados = pd.read_csv("https://raw.githubusercontent.com/Schummy07/monitoramento/main/dados.csv")
+    dados = pd.read_csv("https://raw.githubusercontent.com/Schummy07/monitoramento/refs/heads/main/dados.csv")
     dados["data"] = pd.to_datetime(dados["data"])
     
     data_ini = pd.to_datetime(data_ini)
