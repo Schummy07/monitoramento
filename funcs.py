@@ -12,11 +12,16 @@ def mapa_analitico(variavel, data_ini, data_fin, turno, dia_semana):
     url = "https://raw.githubusercontent.com/Schummy07/monitoramento/refs/heads/main/dados.csv"
     dados = pd.read_csv(url)
     dados["data"] = pd.to_datetime(dados["data"])
-    url_mapa = "https://raw.githubusercontent.com/Schummy07/monitoramento/refs/heads/main/mapa_atual.geojson"
-    mapa = gps.read_file(url_mapa)
     
     data_ini = pd.to_datetime(data_ini)
     data_fin = pd.to_datetime(data_fin)
+    if data_ini >= pd.to_datetime("11/05/2026", dayfirst=True):
+        url_mapa = "https://raw.githubusercontent.com/Schummy07/monitoramento/refs/heads/main/mapa_read.geojson"
+        mapa = gps.read_file(url_mapa)
+    else:
+        url_mapa = "https://raw.githubusercontent.com/Schummy07/monitoramento/refs/heads/main/mapa_atual.geojson"
+        mapa = gps.read_file(url_mapa)
+            
     
     #aplicação dos filtros 
     dados_analise = dados[(dados["data"]>= data_ini) &
