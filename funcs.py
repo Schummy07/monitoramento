@@ -102,6 +102,7 @@ def serie_historica(variavel, data_ini, data_fin, turno, dia_semana):
     data_grafico = data_grafico.groupby(by = ["data", "setor"], as_index = False)[variavel].sum()
     
     figura = px.line(data_grafico, x = "data", y = variavel, color = "setor")
+    figura.update_layout(margin=dict(l=0, r=0, t=1, b=0))
     
     return figura
 
@@ -133,6 +134,7 @@ def medias(variavel, data_ini, data_fin, turno, dia_semana):
     figura.update_layout(barmode = "group", yaxis=dict(categoryorder = "total ascending"))
     figura.update_traces(textposition = "outside")
     figura.update_yaxes(type = "category")
+    figura.update_layout(margin=dict(l=0, r=0, t=1, b=0))
     
     return figura
 
