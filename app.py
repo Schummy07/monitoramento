@@ -27,8 +27,7 @@ app.layout = html.Div([
         dcc.Store(id = "variavel_store"),
         dcc.Store(id = "min_store"),
         dcc.Store(id = "max_store"),
-        html.Div([html.H1("Mapa de Calor", style = {"margin": "0"})],
-                 style = {"height":"5%"}),
+        html.H2("Mapa de Calor"),
         html.Div([
                   dcc.Dropdown(id = "Parametro_Operacional", 
                                options = [{"label": "Tonelagem", "value": "producao"},
@@ -56,10 +55,9 @@ app.layout = html.Div([
                                value = ["seg","ter","qua","qui","sex","sáb","dom"],
                                multi = True)],
                  style = {"display":"flex",
-                          "flexDirection":"column",
+                          "flexDirection":"row",
                           "justifyContent":"center",
-                          "height":"20%",
-                          "width":"20%",
+                          "height":"10%",
                           "gap": "2px"}),
         html.Div([
             html.Div([
@@ -98,11 +96,12 @@ app.layout = html.Div([
                       "width": "90%",
                       "marginTop": "80px",
                       "backgroundColor": "#9feaa8",
-                      "border":"3px solid black"}),
+                      "border":"3px solid black",
+                      "borderRadius": "15px"}),
     
     # bloco que plota o mapa de calor e as séries históricas 
     html.Div([
-        html.Div([html.H1("Série Histórica"),
+        html.Div([html.H2("Série Histórica"),
                   html.Div([
                       dcc.Dropdown(id = "Parametro_Operacional_g",
                                    options = [{"label": "Tonelagem", "value": "producao"},
@@ -130,11 +129,11 @@ app.layout = html.Div([
                                    value = ["seg","ter","qua","qui","sex","sáb","dom"],
                                    multi = True)],
                            style = {"display":"flex",
-                                    "flexDirection":"column",
+                                    "flexDirection":"row",
                                     "justifyContent":"center",
-                                    "height":"25%",
+                                    "height":"10%",
                                     "gap":"2px",
-                                    "width":"20%"}),
+                                    "width":"80%"}),
                   html.Div([
                       html.Div([dcc.Graph(id = "grafico1",
                                           style = {"height":"100%", "width":"100%"})],
@@ -163,12 +162,13 @@ app.layout = html.Div([
                       "width":"90%",
                       "justifyContent":"center",
                       "alignItems":"center",
-                      "border":"5px solid black",
-                      "backgroundColor": "#9feaa8"}),
+                      "border":"3px solid black",
+                      "backgroundColor": "#9feaa8",
+                      "borderRadius": "15px"}),
     
     # bloco que contém o gráfico de correlação com o histograma dos resíduos 
     # possuí um filtro próprio  
-    html.Div([html.H1("Correlação"),
+    html.Div([html.H2("Correlação"),
         html.Div([dcc.Dropdown(id = "variavel 1",
                                options = [{"label":"Tamanho_setor", "value": "km_coleta"},
                                            {"label": "Deslocamento", "value": "km_trajeto"},
@@ -205,10 +205,10 @@ app.layout = html.Div([
                                value = [9,18,16,14,13,20],
                                multi = True)], 
                  style = {"display": "flex", 
-                          "flexDirection": "column", 
+                          "flexDirection": "row", 
                           "justifyContent": "center",
-                          "width": "20%",
-                          "height":"30%",
+                          "width": "80%",
+                          "height":"10%",
                           "gap":"2px"}),
         html.Div([dcc.Graph(id = "correlacao", style = {"width": "65%", "height":"100%"}), 
                   dcc.Graph(id = "histograma", style = {"width": "30%", "height":"100%"})],
@@ -224,7 +224,7 @@ app.layout = html.Div([
                       "backgroundColor": "#9feaa8",
                       "alignItems": "center",
                       "justifyContent":"center",
-                      "border":"5px solid black",
+                      "border":"3px solid black",
                       "borderRadius": "10px",
                       "height":"75vh",
                       "width":"90%"})
