@@ -4,7 +4,7 @@ import plotly.graph_objects as go
 import geopandas as gps
 import numpy as np 
 
-def mapa_analitico(variavel, data_ini, data_fin, turno, dia_semana):
+def mapa_analitico(variavel, data_ini, data_fin, turno, dia_semana, minimo, maximo):
     # coreção da variável para se ajustar ao projeto 
     #variavel = variavel[0]
     
@@ -49,8 +49,15 @@ def mapa_analitico(variavel, data_ini, data_fin, turno, dia_semana):
     mapa_plot = mapa_filtro.__geo_interface__
     
     # mínimo e máximo do colorpad do mapa 
-    min = medias[variavel].min()-(medias[variavel].max()*0.2)
-    max = medias[variavel].max() + (medias[variavel].max()*0.2)
+    if minimo is None:
+        min = medias[variavel].min()
+    else:
+        min = minimo 
+    
+    if maximo is None:
+        max = medias[variavel].max()
+    else:
+        max = maximo
     
     # return mapa_filtro, medias - linha de teste 
     # plot do gráfico georeferenciado 
@@ -67,9 +74,8 @@ def mapa_analitico(variavel, data_ini, data_fin, turno, dia_semana):
         opacity = 0.5)
     
     fig.update_layout(
-        margin=dict(l=8, r=0, t=0, b=0), 
-        width = 400, 
-        height = 600)
+        margin=dict(l=8, r=0, t=0, b=0),
+        autosize = True)
     
     return fig
     
@@ -213,3 +219,22 @@ def histograma(variavel1, variavel2, data_ini, data_fin, dia_semana, turno, seto
     
     
     return figura
+
+def filtro_guardar(variavel, data_ini, data_fin, turno, dia_semana):
+    
+    url = "https://raw.githubusercontent.com/Schummy07/monitoramento/refs/heads/main/dados.csv"
+    dados = pd.read_csv(url)
+    dados["data"] = pd.to_datetime(dados["data"])
+    
+    dados_analise = dados[(dados["data"]>= data_ini) &
+                              (dados["data"]<= data_fin) &
+                              (dados["turno"].isin(turno)) &
+                              (dados["dia_semana"].isin(dia_semana))]
+
+    medias = dados_analise.groupby(by = ["data" ,"setor"], as_index = False)[variavel].sum()
+    medias = medias.groupby("setor", as_index = False)[variavel].mean()
+    min_guard = medias[variavel].min()
+    max_guard = medias[variavel].max()
+    var_guard = variavel
+    
+    return var_guard, min_guard, max_guard
