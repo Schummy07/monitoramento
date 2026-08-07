@@ -99,7 +99,12 @@ def serie_historica(variavel, data_ini, data_fin, turno, dia_semana):
                                   text = "não há valores correspondentes para o filtro selecionado")
             return figura
     
-    data_grafico = data_grafico.groupby(by = ["data", "setor"], as_index = False)[variavel].sum()
+    if variavel == "ton/h":
+        data_grafico = data_grafico.groupby(by = ["data", "setor"], as_index = False)[variavel].mean()
+    elif variavel == "ton/km":
+        data_grafico = data_grafico.groupby(by = ["data", "setor"], as_index = False)[variavel].mean()
+    else:
+        data_grafico = data_grafico.groupby(by = ["data", "setor"], as_index = False)[variavel].sum()
     
     figura = px.line(data_grafico, x = "data", y = variavel, color = "setor")
     figura.update_layout(margin=dict(l=0, r=0, t=1, b=0))
