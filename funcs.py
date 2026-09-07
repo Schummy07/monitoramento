@@ -26,8 +26,11 @@ def mapa_analitico(variavel, data_ini, data_fin, turno, dia_semana, minimo, maxi
     #importação dos dados
     url = "https://raw.githubusercontent.com/Schummy07/monitoramento/refs/heads/main/dados.xlsx"
     dados = pd.read_excel(url, sheet_name = "Dados")
-    #dados["data"] = pd.to_datetime(dados["data"])
-    dropar = dados[(dados["setor"] == 22) & (dados["setor"] == 23)].index
+    dados["data"] = pd.to_datetime(dados["data"])
+    dropar = dados[(dados["setor"] == 22) | 
+                   (dados["setor"] == 23) | 
+                   (dados["hora_fin"].map(type) == float) |
+                   (dados["hora_ini"].map(type) == float)].index
     dados.drop(dropar, axis = 0, inplace = True)
     dados.reset_index(inplace = True)
     
@@ -49,7 +52,7 @@ def mapa_analitico(variavel, data_ini, data_fin, turno, dia_semana, minimo, maxi
                           (dados["data"]<= data_fin) &
                           (dados["turno"].isin(turno)) &
                           (dados["dia_semana"].isin(dia_semana))]
-    
+
     for i in dados_analise:
         if len(dados_analise[i]) == 0:
             figura = go.Figure()
@@ -63,13 +66,13 @@ def mapa_analitico(variavel, data_ini, data_fin, turno, dia_semana, minimo, maxi
     if variavel == "horas_trabalhadas":
         medias = dados_analise.groupby(by = ["data", "setor"], as_index = False).agg(inicio_setor = ("tempo_ini", "min"),
                                                                                      final_setor = ("tempo_fin", "max"))
-        medias["horas_trabalhadas"] = medias["inicio_setor"] - medias["final_setor"]
+        medias["horas_trabalhadas"] = medias["final_setor"] - medias["inicio_setor"]
     else:
         medias = dados_analise.groupby(by = ["data" ,"setor"], as_index = False)[variavel].sum()
         
     medias = medias.groupby("setor", as_index = False)[variavel].mean()
-    medias["setor"] = [f"0{i}" if i <10 else f"{i}" for i in medias["setor"]]
-    
+    medias["setor"] =  medias["setor"].astype(float).astype(int).astype(str).str.zfill(2)
+
     #aplicação do filtro no arquivo shp 
     mapa_filtro = mapa[mapa["SETOR"].isin(medias["setor"])]
     mapa_plot = mapa_filtro.__geo_interface__

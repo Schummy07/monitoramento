@@ -35,7 +35,7 @@ app.layout = html.Div([
                                           {"label": "Tamanho: km percorrido em coleta", "value": "km_coleta"}, 
                                           {"label": "Produtividade: ton/h", "value": "ton/h"},
                                           {"label": "Densidade: ton/km", "value": "ton/km"},
-                                          {"label": "Tempo_Total_trabalhado", "value": "horas_trabalhadas"}],
+                                          {"label": "Tempo_Total_Trabalhado", "value": "horas_trabalhadas"}],
                                value = "producao",
                                multi = False),
                   dcc.DatePickerRange(id = "filtro_data",
