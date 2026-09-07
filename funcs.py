@@ -3,18 +3,39 @@ import plotly.express as px
 import plotly.graph_objects as go 
 import geopandas as gps
 import numpy as np 
+import datetime as dt 
+from datetime import time, datetime
+
+
+def converter_p_horas(x):
+    
+    lista_teste = []
+    for i in x: 
+        if isinstance(i, datetime) == True:
+            lista_teste.append(24 + i.hour + (i.minute/60))
+        else:
+            lista_teste.append(i.hour + (i.minute/60))
+            
+    
+    return lista_teste
 
 def mapa_analitico(variavel, data_ini, data_fin, turno, dia_semana, minimo, maximo):
     # coreção da variável para se ajustar ao projeto 
     #variavel = variavel[0]
     
     #importação dos dados
-    url = "https://raw.githubusercontent.com/Schummy07/monitoramento/refs/heads/main/dados.csv"
-    dados = pd.read_csv(url)
-    dados["data"] = pd.to_datetime(dados["data"])
+    url = "https://raw.githubusercontent.com/Schummy07/monitoramento/refs/heads/main/dados.xlsx"
+    dados = pd.read_excel(url, sheet_name = "Dados")
+    #dados["data"] = pd.to_datetime(dados["data"])
+    dropar = dados[(dados["setor"] == 22) & (dados["setor"] == 23)].index
+    dados.drop(dropar, axis = 0, inplace = True)
+    dados.reset_index(inplace = True)
     
     data_ini = pd.to_datetime(data_ini)
     data_fin = pd.to_datetime(data_fin)
+    dados["tempo_ini"] = converter_p_horas(dados["hora_ini"])
+    dados["tempo_fin"] = converter_p_horas(dados["hora_fin"])
+    
     if data_ini >= pd.to_datetime("11/05/2026", dayfirst=True):
         url_mapa = "https://raw.githubusercontent.com/Schummy07/monitoramento/refs/heads/main/mapa_read.geojson"
         mapa = gps.read_file(url_mapa)
@@ -37,10 +58,15 @@ def mapa_analitico(variavel, data_ini, data_fin, turno, dia_semana, minimo, maxi
                                   x = 0.5, y = 0.5,
                                   text = "não há valores correspondentes para o filtro selecionado")
             return figura 
-        
     
     #calculo das médias da variável selecionada para cada setor 
-    medias = dados_analise.groupby(by = ["data" ,"setor"], as_index = False)[variavel].sum()
+    if variavel == "horas_trabalhadas":
+        medias = dados_analise.groupby(by = ["data", "setor"], as_index = False).agg(inicio_setor = ("tempo_ini", "min"),
+                                                                                     final_setor = ("tempo_fin", "max"))
+        medias["horas_trabalhadas"] = medias["inicio_setor"] - medias["final_setor"]
+    else:
+        medias = dados_analise.groupby(by = ["data" ,"setor"], as_index = False)[variavel].sum()
+        
     medias = medias.groupby("setor", as_index = False)[variavel].mean()
     medias["setor"] = [f"0{i}" if i <10 else f"{i}" for i in medias["setor"]]
     
