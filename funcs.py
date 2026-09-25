@@ -67,6 +67,8 @@ def mapa_analitico(variavel, data_ini, data_fin, turno, dia_semana, minimo, maxi
         medias = dados_analise.groupby(by = ["data", "setor"], as_index = False).agg(inicio_setor = ("tempo_ini", "min"),
                                                                                      final_setor = ("tempo_fin", "max"))
         medias["horas_trabalhadas"] = medias["final_setor"] - medias["inicio_setor"]
+    elif variavel == "ton/h" or variavel == "ton/km":
+        medias = dados_analise.groupby(by = ["data" ,"setor"], as_index = False)[variavel].mean()
     else:
         medias = dados_analise.groupby(by = ["data" ,"setor"], as_index = False)[variavel].sum()
         
