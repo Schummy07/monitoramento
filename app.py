@@ -244,14 +244,14 @@ def gerar_mapa(variavel, data_ini, data_fin, turno, dia_semana,var_guard ,minimo
     else:
         return fc.mapa_analitico(variavel, data_ini, data_fin, turno, dia_semana, None, None)
 
-def guardar_vars(n_clicks, variavel, data_ini, data_fin, turno, dia_semana):
+"""def guardar_vars(n_clicks, variavel, data_ini, data_fin, turno, dia_semana):
     if not n_clicks:
         return dash.no_update
     resposta = fc.filtro_guardar(variavel, data_ini, data_fin, turno, dia_semana)
     var = resposta[0]
     min = resposta[1]
     max = resposta[2]
-    return var, min, max
+    return var, min, max"""
 
 def congelar_mapa(n_clicks, variavel, data_ini, data_fin, turno, dia_semana):
     if not n_clicks:
@@ -270,7 +270,7 @@ def congelar_mapa(n_clicks, variavel, data_ini, data_fin, turno, dia_semana):
                           "fontWeight": "bold"}))
     
     lista.append(
-        dcc.Graph(figure = grafico,
+        dcc.Graph(figure = grafico[0],
                   style = {"height":"95%","width":"100%"}))
     
     estilo = {"width":"42%",
@@ -295,6 +295,9 @@ def gerar_histograma(variavel1, variavel2, data_ini, data_fin, dia_semana, turno
     return fc.histograma(variavel1, variavel2, data_ini, data_fin, dia_semana, turno, setor)
 
 app.callback(Output("mapa", "figure"),
+             Output("variavel_store", "data"),
+             Output("min_store", "data"),
+             Output("max_store", "data"),
              Input("Parametro_Operacional", "value"),
              Input("filtro_data", "start_date"),
              Input("filtro_data", "end_date"),
@@ -304,7 +307,7 @@ app.callback(Output("mapa", "figure"),
              Input("min_store", "data"),
              Input("max_store", "data"))(gerar_mapa)
 
-app.callback(Output("variavel_store","data"),
+"""app.callback(Output("variavel_store","data"),
              Output("min_store", "data"),
              Output("max_store", "data"),
              Input("freeze", "n_clicks"),
@@ -312,7 +315,7 @@ app.callback(Output("variavel_store","data"),
              State("filtro_data", "start_date"),
              State("filtro_data", "end_date"),
              State("Turno", "value"),
-             State("Frequencia", "value"))(guardar_vars)
+             State("Frequencia", "value"))(guardar_vars)"""
 
 app.callback(Output("congelar", "children"),
              Output("congelar", "style"),

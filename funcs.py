@@ -22,7 +22,7 @@ def converter_p_horas(x):
 def mapa_analitico(variavel, data_ini, data_fin, turno, dia_semana, minimo, maximo):
     # coreção da variável para se ajustar ao projeto 
     #variavel = variavel[0]
-    
+    print(f"o valor minimo é{minimo}\no valor máximo é {maximo}")
     #importação dos dados
     url = "https://raw.githubusercontent.com/Schummy07/monitoramento/refs/heads/main/dados.xlsx"
     dados = pd.read_excel(url, sheet_name = "Dados")
@@ -60,7 +60,7 @@ def mapa_analitico(variavel, data_ini, data_fin, turno, dia_semana, minimo, maxi
                                   yref = "paper",
                                   x = 0.5, y = 0.5,
                                   text = "não há valores correspondentes para o filtro selecionado")
-            return figura 
+            return figura
     
     #calculo das médias da variável selecionada para cada setor 
     if variavel == "horas_trabalhadas":
@@ -108,7 +108,7 @@ def mapa_analitico(variavel, data_ini, data_fin, turno, dia_semana, minimo, maxi
         margin=dict(l=8, r=0, t=0, b=0),
         autosize = True)
     
-    return fig
+    return fig, variavel, min, max
     
     
 def serie_historica(variavel, data_ini, data_fin, turno, dia_semana):
@@ -260,8 +260,8 @@ def histograma(variavel1, variavel2, data_ini, data_fin, dia_semana, turno, seto
 
 def filtro_guardar(variavel, data_ini, data_fin, turno, dia_semana):
     
-    url = "https://raw.githubusercontent.com/Schummy07/monitoramento/refs/heads/main/dados.csv"
-    dados = pd.read_csv(url)
+    url = "https://raw.githubusercontent.com/Schummy07/monitoramento/refs/heads/main/dados.xlsx"
+    dados = pd.read_excel(url)
     dados["data"] = pd.to_datetime(dados["data"])
     
     dados_analise = dados[(dados["data"]>= data_ini) &
@@ -271,6 +271,8 @@ def filtro_guardar(variavel, data_ini, data_fin, turno, dia_semana):
 
     medias = dados_analise.groupby(by = ["data" ,"setor"], as_index = False)[variavel].sum()
     medias = medias.groupby("setor", as_index = False)[variavel].mean()
+    
+    
     min_guard = medias[variavel].min()
     max_guard = medias[variavel].max()
     var_guard = variavel
