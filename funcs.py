@@ -24,20 +24,12 @@ def mapa_analitico(variavel, data_ini, data_fin, turno, dia_semana, minimo, maxi
     #variavel = variavel[0]
     print(f"o valor minimo é{minimo}\no valor máximo é {maximo}")
     #importação dos dados
-    url = "https://raw.githubusercontent.com/Schummy07/monitoramento/refs/heads/main/dados.xlsx"
-    dados = pd.read_excel(url, sheet_name = "Dados")
+    url = "https://raw.githubusercontent.com/Schummy07/monitoramento/refs/heads/main/dados.csv"
+    dados = pd.read_csv(url)
     dados["data"] = pd.to_datetime(dados["data"])
-    dropar = dados[(dados["setor"] == 22) | 
-                   (dados["setor"] == 23) | 
-                   (dados["hora_fin"].map(type) == float) |
-                   (dados["hora_ini"].map(type) == float)].index
-    dados.drop(dropar, axis = 0, inplace = True)
-    dados.reset_index(inplace = True)
     
     data_ini = pd.to_datetime(data_ini)
     data_fin = pd.to_datetime(data_fin)
-    dados["tempo_ini"] = converter_p_horas(dados["hora_ini"])
-    dados["tempo_fin"] = converter_p_horas(dados["hora_fin"])
     
     if data_ini >= pd.to_datetime("11/05/2026", dayfirst=True):
         url_mapa = "https://raw.githubusercontent.com/Schummy07/monitoramento/refs/heads/main/mapa_read.geojson"
@@ -108,7 +100,7 @@ def mapa_analitico(variavel, data_ini, data_fin, turno, dia_semana, minimo, maxi
         margin=dict(l=8, r=0, t=0, b=0),
         autosize = True)
     
-    return fig, variavel, min, max
+    return fig
     
     
 def serie_historica(variavel, data_ini, data_fin, turno, dia_semana):
@@ -260,7 +252,7 @@ def histograma(variavel1, variavel2, data_ini, data_fin, dia_semana, turno, seto
 
 def filtro_guardar(variavel, data_ini, data_fin, turno, dia_semana):
     
-    url = "https://raw.githubusercontent.com/Schummy07/monitoramento/refs/heads/main/dados.xlsx"
+    url = "https://raw.githubusercontent.com/Schummy07/monitoramento/refs/heads/main/dados.csv"
     dados = pd.read_excel(url)
     dados["data"] = pd.to_datetime(dados["data"])
     
@@ -268,8 +260,17 @@ def filtro_guardar(variavel, data_ini, data_fin, turno, dia_semana):
                               (dados["data"]<= data_fin) &
                               (dados["turno"].isin(turno)) &
                               (dados["dia_semana"].isin(dia_semana))]
-
-    medias = dados_analise.groupby(by = ["data" ,"setor"], as_index = False)[variavel].sum()
+    
+    
+    if variavel == "horas_trabalhadas":
+        medias = dados_analise.groupby(by = ["data", "setor"], as_index = False).agg(inicio_setor = ("tempo_ini", "min"),
+                                                                                     final_setor = ("tempo_fin", "max"))
+        medias["horas_trabalhadas"] = medias["final_setor"] - medias["inicio_setor"]
+    elif variavel == "ton/h" or variavel == "ton/km":
+        medias = dados_analise.groupby(by = ["data" ,"setor"], as_index = False)[variavel].mean()
+    else:
+        medias = dados_analise.groupby(by = ["data" ,"setor"], as_index = False)[variavel].sum()
+    
     medias = medias.groupby("setor", as_index = False)[variavel].mean()
     
     
