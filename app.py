@@ -270,7 +270,7 @@ def congelar_mapa(n_clicks, variavel, data_ini, data_fin, turno, dia_semana):
                           "fontWeight": "bold"}))
     
     lista.append(
-        dcc.Graph(figure = grafico[0],
+        dcc.Graph(figure = grafico,
                   style = {"height":"95%","width":"100%"}))
     
     estilo = {"width":"42%",

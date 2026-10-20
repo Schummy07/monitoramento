@@ -253,7 +253,7 @@ def histograma(variavel1, variavel2, data_ini, data_fin, dia_semana, turno, seto
 def filtro_guardar(variavel, data_ini, data_fin, turno, dia_semana):
     
     url = "https://raw.githubusercontent.com/Schummy07/monitoramento/refs/heads/main/dados.csv"
-    dados = pd.read_excel(url)
+    dados = pd.read_csv(url)
     dados["data"] = pd.to_datetime(dados["data"])
     
     dados_analise = dados[(dados["data"]>= data_ini) &
