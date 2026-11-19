@@ -54,6 +54,10 @@ app.layout = html.Div([
                                           {"label":"Sexta", "value": "sex"},
                                           {"label":"Sabado", "value": "sáb"}],
                                value = ["seg","ter","qua","qui","sex","sáb","dom"],
+                               multi = True),
+                  dcc.Dropdown(id = "Setor_mapa",
+                               options = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21],
+                               value = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21],
                                multi = True)],
                  style = {"display":"flex",
                           "flexDirection":"row",
@@ -93,7 +97,7 @@ app.layout = html.Div([
                       "flexDirection":"column",
                       "alignItems":"center",
                       "justifyContent":"center",
-                      "height":"120vh",
+                      "height":"115vh",
                       "width": "98%",
                       "marginTop": "80px",
                       "backgroundColor": "#9feaa8",
@@ -238,27 +242,27 @@ app.layout = html.Div([
                              "backgroundColor": "#26ce34"})
 
 
-def gerar_mapa(variavel, data_ini, data_fin, turno, dia_semana,var_guard ,minimo, maximo):
+def gerar_mapa(variavel, data_ini, data_fin, turno, dia_semana, setor, var_guard ,minimo, maximo):
     if var_guard == variavel:
-        return fc.mapa_analitico(variavel, data_ini, data_fin, turno, dia_semana, minimo, maximo)
+        return fc.mapa_analitico(variavel, data_ini, data_fin, turno, dia_semana, setor, minimo, maximo)
     else:
-        return fc.mapa_analitico(variavel, data_ini, data_fin, turno, dia_semana, None, None)
+        return fc.mapa_analitico(variavel, data_ini, data_fin, turno, dia_semana, setor, None, None)
 
-def guardar_vars(n_clicks, variavel, data_ini, data_fin, turno, dia_semana):
+def guardar_vars(n_clicks, variavel, data_ini, data_fin, turno, dia_semana, setor):
     if not n_clicks:
         return dash.no_update
-    resposta = fc.filtro_guardar(variavel, data_ini, data_fin, turno, dia_semana)
+    resposta = fc.filtro_guardar(variavel, data_ini, data_fin, turno, dia_semana, setor)
     var = resposta[0]
     min = resposta[1]
     max = resposta[2]
     return var, min, max
 
-def congelar_mapa(n_clicks, variavel, data_ini, data_fin, turno, dia_semana):
+def congelar_mapa(n_clicks, variavel, data_ini, data_fin, turno, dia_semana, setor):
     if not n_clicks:
         return dash.no_update
     
     lista = []
-    grafico = fc.mapa_analitico(variavel, data_ini, data_fin, turno, dia_semana, None, None)
+    grafico = fc.mapa_analitico(variavel, data_ini, data_fin, turno, dia_semana, setor, None, None)
     
     var = str(variavel)
     data_in = str(data_ini)
@@ -300,6 +304,7 @@ app.callback(Output("mapa", "figure"),
              Input("filtro_data", "end_date"),
              Input("Turno", "value"),
              Input("Frequencia", "value"),
+             Input("Setor_mapa", "value"),
              Input("variavel_store","data"),
              Input("min_store", "data"),
              Input("max_store", "data"))(gerar_mapa)
@@ -312,7 +317,8 @@ app.callback(Output("variavel_store","data"),
              State("filtro_data", "start_date"),
              State("filtro_data", "end_date"),
              State("Turno", "value"),
-             State("Frequencia", "value"))(guardar_vars)
+             State("Frequencia", "value"),
+             State("Setor_mapa", "value"))(guardar_vars)
 
 app.callback(Output("congelar", "children"),
              Output("congelar", "style"),
@@ -321,7 +327,8 @@ app.callback(Output("congelar", "children"),
              State("filtro_data", "start_date"),
              State("filtro_data", "end_date"),
              State("Turno", "value"),
-             State("Frequencia", "value"))(congelar_mapa)
+             State("Frequencia", "value"),
+             State("Setor_mapa", "value"))(congelar_mapa)
 
 app.callback(Output("grafico1", "figure"),
              Input("Parametro_Operacional_g", "value"),

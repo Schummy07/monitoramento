@@ -19,7 +19,7 @@ def converter_p_horas(x):
     
     return lista_teste
 
-def mapa_analitico(variavel, data_ini, data_fin, turno, dia_semana, minimo, maximo):
+def mapa_analitico(variavel, data_ini, data_fin, turno, dia_semana, setor, minimo, maximo):
     # coreção da variável para se ajustar ao projeto 
     #variavel = variavel[0]
     print(f"o valor minimo é{minimo}\no valor máximo é {maximo}")
@@ -43,7 +43,8 @@ def mapa_analitico(variavel, data_ini, data_fin, turno, dia_semana, minimo, maxi
     dados_analise = dados[(dados["data"]>= data_ini) &
                           (dados["data"]<= data_fin) &
                           (dados["turno"].isin(turno)) &
-                          (dados["dia_semana"].isin(dia_semana))]
+                          (dados["dia_semana"].isin(dia_semana)) &
+                          (dados["setor"].isin(setor))]
 
     for i in dados_analise:
         if len(dados_analise[i]) == 0:
@@ -250,7 +251,7 @@ def histograma(variavel1, variavel2, data_ini, data_fin, dia_semana, turno, seto
     
     return figura
 
-def filtro_guardar(variavel, data_ini, data_fin, turno, dia_semana):
+def filtro_guardar(variavel, data_ini, data_fin, turno, dia_semana, setor):
     
     url = "https://raw.githubusercontent.com/Schummy07/monitoramento/refs/heads/main/dados.csv"
     dados = pd.read_csv(url)
@@ -259,7 +260,8 @@ def filtro_guardar(variavel, data_ini, data_fin, turno, dia_semana):
     dados_analise = dados[(dados["data"]>= data_ini) &
                               (dados["data"]<= data_fin) &
                               (dados["turno"].isin(turno)) &
-                              (dados["dia_semana"].isin(dia_semana))]
+                              (dados["dia_semana"].isin(dia_semana)) &
+                              (dados["setor"].isin(setor))]
     
     
     if variavel == "horas_trabalhadas":
