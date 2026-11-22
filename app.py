@@ -104,7 +104,7 @@ app.layout = html.Div([
                       "border":"3px solid black",
                       "borderRadius": "15px"}),
     
-    # bloco que plota o mapa de calor e as séries históricas 
+    # bloco que plota a série histórica e o gráfico de barras 
     html.Div([
         html.Div([html.H2("Série Histórica"),
                   html.Div([
@@ -132,6 +132,10 @@ app.layout = html.Div([
                                               {"label":"Sexta", "value": "sex"},
                                               {"label":"Sabado", "value": "sáb"}],
                                    value = ["seg","ter","qua","qui","sex","sáb","dom"],
+                                   multi = True),
+                      dcc.Dropdown(id = "Setores_graficos",
+                                   options = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21],
+                                   value = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21],
                                    multi = True)],
                            style = {"display":"flex",
                                     "flexDirection":"row",
@@ -142,15 +146,15 @@ app.layout = html.Div([
                   html.Div([
                       html.Div([dcc.Graph(id = "grafico1",
                                           style = {"height":"100%", "width":"100%"})],
-                               style = {"height":"48%",
+                               style = {"height":"35%",
                                         "width":"100%"}),
                       html.Div([dcc.Graph(id = "grafico2",
                                           style = {"height":"100%", "width":"100%"})],
-                               style = {"height":"48%",
+                               style = {"height":"60%",
                                         "width":"100%"})], 
                            style = {"display":"flex",
                                     "flexDirection":"column",
-                                    "height":"65%",
+                                    "height":"75%",
                                     "width":"90%",
                                     "gap":"5px"})],
                  style = {"display":"flex",
@@ -163,7 +167,7 @@ app.layout = html.Div([
              
              style = {"display":"flex",
                       "flexDirection":"column",
-                      "height":"90vh",
+                      "height":"110vh",
                       "width":"90%",
                       "justifyContent":"center",
                       "alignItems":"center",
@@ -286,11 +290,11 @@ def congelar_mapa(n_clicks, variavel, data_ini, data_fin, turno, dia_semana, set
     return lista, estilo
         
 
-def gerar_grafico1(variavel, data_ini, data_fin, turno, dia_semana):
-    return fc.serie_historica(variavel, data_ini, data_fin, turno, dia_semana)
+def gerar_grafico1(variavel, data_ini, data_fin, turno, dia_semana, setor):
+    return fc.serie_historica(variavel, data_ini, data_fin, turno, dia_semana, setor)
 
-def gerar_grafico2(variavel, data_ini, data_fin, turno, dia_semana):
-    return fc.medias(variavel, data_ini, data_fin, turno, dia_semana)
+def gerar_grafico2(variavel, data_ini, data_fin, turno, dia_semana, setor):
+    return fc.medias(variavel, data_ini, data_fin, turno, dia_semana, setor)
 
 def gerar_correlacao(variavel1, variavel2, data_ini, data_fin, dia_semana, turno, setor):
     return fc.correl(variavel1, variavel2, data_ini, data_fin, dia_semana, turno, setor)
@@ -335,14 +339,16 @@ app.callback(Output("grafico1", "figure"),
              Input("filtro_data_g", "start_date"),
              Input("filtro_data_g", "end_date"),
              Input("Turno_g", "value"),
-             Input("Frequencia_g", "value"))(gerar_grafico1)
+             Input("Frequencia_g", "value"),
+             Input("Setores_graficos", "value"))(gerar_grafico1)
 
 app.callback(Output("grafico2", "figure"),
              Input("Parametro_Operacional_g", "value"),
              Input("filtro_data_g", "start_date"),
              Input("filtro_data_g", "end_date"),
              Input("Turno_g", "value"),
-             Input("Frequencia_g", "value"))(gerar_grafico2)
+             Input("Frequencia_g", "value"),
+             Input("Setores_graficos", "value"))(gerar_grafico2)
 
 app.callback(Output("correlacao", "figure"),
              Input("variavel 1", "value"),

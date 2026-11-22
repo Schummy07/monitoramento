@@ -104,7 +104,7 @@ def mapa_analitico(variavel, data_ini, data_fin, turno, dia_semana, setor, minim
     return fig
     
     
-def serie_historica(variavel, data_ini, data_fin, turno, dia_semana):
+def serie_historica(variavel, data_ini, data_fin, turno, dia_semana, setor):
     data = pd.read_csv("https://raw.githubusercontent.com/Schummy07/monitoramento/refs/heads/main/dados.csv")
     data["data"] = pd.to_datetime(data["data"])
     
@@ -112,7 +112,9 @@ def serie_historica(variavel, data_ini, data_fin, turno, dia_semana):
     data_fin = pd.to_datetime(data_fin)
     
     data_filtro = data[(data["data"] >= data_ini) & (data["data"]<= data_fin)]
-    data_grafico = data_filtro[(data_filtro["turno"].isin(turno)) & (data_filtro["dia_semana"].isin(dia_semana))]
+    data_grafico = data_filtro[(data_filtro["turno"].isin(turno)) &
+                               (data_filtro["dia_semana"].isin(dia_semana)) &
+                               (data_filtro["setor"].isin(setor))]
     
     for i in data_grafico:
         if len(data_grafico[i]) == 0:
@@ -136,7 +138,7 @@ def serie_historica(variavel, data_ini, data_fin, turno, dia_semana):
     return figura
 
 
-def medias(variavel, data_ini, data_fin, turno, dia_semana):
+def medias(variavel, data_ini, data_fin, turno, dia_semana, setor):
     data = pd.read_csv("https://raw.githubusercontent.com/Schummy07/monitoramento/refs/heads/main/dados.csv")
     data["data"] = pd.to_datetime(data["data"])
     
@@ -144,7 +146,9 @@ def medias(variavel, data_ini, data_fin, turno, dia_semana):
     data_fin = pd.to_datetime(data_fin)
     
     data_filtro = data[(data["data"] >= data_ini) & (data["data"]<= data_fin)]
-    data_grafico = data_filtro[(data_filtro["turno"].isin(turno)) & (data_filtro["dia_semana"].isin(dia_semana))]
+    data_grafico = data_filtro[(data_filtro["turno"].isin(turno)) &
+                               (data_filtro["dia_semana"].isin(dia_semana)) &
+                               (data_filtro["setor"].isin(setor))]
     
     for i in data_grafico:
         if len(data_grafico[i]) == 0:
