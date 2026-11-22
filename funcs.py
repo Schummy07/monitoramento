@@ -163,7 +163,8 @@ def medias(variavel, data_ini, data_fin, turno, dia_semana, setor):
     data_grafico = data_grafico.groupby( by = ["setor", "dia_semana"], as_index = False)[variavel].mean()
     data_grafico[variavel] = data_grafico[variavel].round(2)
     
-    figura = px.bar(data_grafico, x = variavel, y = "setor", color = "dia_semana", orientation = "h", text = variavel)
+    figura = px.bar(data_grafico, x = variavel, y = "setor", color = "dia_semana", orientation = "h", text = variavel,
+                    color_discrete_sequence=px.colors.sequential.OrRd)
     figura.update_layout(barmode = "group", yaxis=dict(categoryorder = "total ascending"))
     figura.update_traces(textposition = "outside")
     figura.update_yaxes(type = "category")
